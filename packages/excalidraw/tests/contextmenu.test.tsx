@@ -103,6 +103,9 @@ describe("contextMenu element", () => {
         contextMenu?.querySelector(`li[data-testid="${shortcutName}"]`),
       ).not.toBeNull();
     });
+    expect(
+      contextMenu?.querySelector('li[data-testid="duplicateSelection"]'),
+    ).toBeNull();
   });
 
   it("shows context menu for element", () => {
@@ -122,6 +125,7 @@ describe("contextMenu element", () => {
       "cut",
       "copy",
       "paste",
+      "duplicateSelection",
       "wrapSelectionInFrame",
       "copyStyles",
       "pasteStyles",
@@ -133,7 +137,6 @@ describe("contextMenu element", () => {
       "bringForward",
       "sendToBack",
       "bringToFront",
-      "duplicateSelection",
       "hyperlink",
       "copyElementLink",
       "toggleElementLock",
@@ -146,6 +149,23 @@ describe("contextMenu element", () => {
         contextMenu?.querySelector(`li[data-testid="${item}"]`),
       ).not.toBeNull();
     });
+    expect(
+      Array.from(contextMenuOptions ?? [], (item) =>
+        item.getAttribute("data-testid"),
+      ).slice(0, 4),
+    ).toEqual(["cut", "copy", "paste", "duplicateSelection"]);
+    expect(
+      contextMenu?.querySelector('li[data-testid="paste"]')?.nextElementSibling,
+    ).toHaveAttribute("data-testid", "duplicateSelection");
+    expect(
+      Array.from(contextMenuOptions ?? [], (item) =>
+        item.getAttribute("data-testid"),
+      ).slice(-3),
+    ).toEqual([
+      "copyElementLink",
+      "toggleElementLock",
+      "deleteSelectedElements",
+    ]);
   });
 
   it("shows context menu for element", () => {
