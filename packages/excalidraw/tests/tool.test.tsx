@@ -125,6 +125,32 @@ describe("findShapeByKey()", () => {
   });
 });
 
+describe("main toolbar", () => {
+  it("groups the eraser after selection and before the drawing tools", async () => {
+    const { container, getByTestId } = await render(<Excalidraw />);
+    const toolButtons = container.querySelectorAll<HTMLElement>(
+      '.App-toolbar [data-testid^="toolbar-"]:not([data-testid="toolbar-lock"])',
+    );
+
+    expect(Array.from(toolButtons, (button) => button.dataset.testid)).toEqual([
+      "toolbar-hand",
+      "toolbar-selection",
+      "toolbar-eraser",
+      "toolbar-rectangle",
+      "toolbar-diamond",
+      "toolbar-ellipse",
+      "toolbar-arrow",
+      "toolbar-line",
+      "toolbar-freedraw",
+      "toolbar-text",
+      "toolbar-image",
+    ]);
+
+    fireEvent.click(getByTestId("toolbar-eraser"));
+    expect(window.h.state.activeTool.type).toBe("eraser");
+  });
+});
+
 describe("props.activeTool (forced tool)", () => {
   const h = window.h;
   const mouse = new Pointer("mouse");
